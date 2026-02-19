@@ -6,7 +6,7 @@
 <title>Iftar & Suhoor Booking — Skyvertise</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a0f;--card:#13131a;--gold:#d4a437;--gold-light:#f0d078;--gold-dim:#a07820;--text:#e8e8e8;--text-dim:#888;--border:#2a2a35;--radius:12px;--green:#2d8a4e;--yellow:#b8860b;--red:#8b2020;--grey:#333}
+:root{--bg:#0a0a0f;--card:#13131a;--gold:#d4a437;--gold-light:#f0d078;--gold-dim:#a07820;--text:#e8e8e8;--text-dim:#888;--border:#2a2a35;--radius:12px;--green:#2d8a4e;--yellow:#b8860b;--red:#8b2252}
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 20%,rgba(212,164,55,.06) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(212,164,55,.04) 0%,transparent 50%);pointer-events:none;z-index:0}
 .container{max-width:600px;margin:0 auto;padding:24px 16px 60px;position:relative;z-index:1}
@@ -16,193 +16,165 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 h1{font-size:28px;font-weight:300;letter-spacing:1px;margin-bottom:6px}
 h1 span{color:var(--gold);font-weight:600}
 .subtitle{color:var(--text-dim);font-size:14px;line-height:1.6}
-.venue{color:var(--gold-light);font-weight:500;font-size:15px;margin-top:12px}
-.lanterns{display:flex;justify-content:center;gap:32px;margin:24px 0 8px;font-size:28px;opacity:.5}
-.divider{display:flex;align-items:center;gap:12px;margin:28px 0}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent)}
-.divider span{color:var(--gold-dim);font-size:12px;letter-spacing:3px;text-transform:uppercase}
+.subtitle a{color:var(--gold);text-decoration:none}
 
 /* Calendar */
-.calendar-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.calendar{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin:24px 0}
 .cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.cal-header h3{font-size:16px;font-weight:500;color:var(--gold-light)}
-.cal-nav{display:flex;gap:8px}
-.cal-nav button{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);width:32px;height:32px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.cal-nav button:hover{border-color:var(--gold);color:var(--gold)}
-.cal-nav button:disabled{opacity:.3;cursor:not-allowed}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cal-day-name{text-align:center;font-size:11px;color:var(--text-dim);padding:4px 0;font-weight:600;text-transform:uppercase}
-.cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;font-size:14px;cursor:pointer;transition:all .2s;border:2px solid transparent;position:relative}
+.cal-header h3{font-size:16px;font-weight:500}
+.cal-nav{background:none;border:1px solid var(--border);color:var(--text);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:14px}
+.cal-nav:hover{border-color:var(--gold);color:var(--gold)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal-day-label{font-size:11px;color:var(--text-dim);padding:4px 0;font-weight:600}
+.cal-day{padding:10px 4px;border-radius:8px;font-size:14px;cursor:pointer;border:2px solid transparent;transition:all .2s;position:relative}
+.cal-day:hover:not(.past):not(.empty){border-color:var(--gold);transform:scale(1.05)}
 .cal-day.empty{cursor:default}
-.cal-day.past{background:rgba(255,255,255,.02);color:var(--text-dim);cursor:not-allowed;opacity:.4}
-.cal-day.available{background:rgba(45,138,78,.15);color:#6fcf8d;border-color:rgba(45,138,78,.3)}
-.cal-day.available:hover{border-color:var(--green);transform:scale(1.05)}
-.cal-day.partial{background:rgba(184,134,11,.15);color:#e0c060;border-color:rgba(184,134,11,.3)}
-.cal-day.partial:hover{border-color:var(--yellow);transform:scale(1.05)}
-.cal-day.full{background:rgba(139,32,32,.15);color:#d06060;border-color:rgba(139,32,32,.2);cursor:not-allowed}
-.cal-day.selected{border-color:var(--gold)!important;box-shadow:0 0 12px rgba(212,164,55,.3);transform:scale(1.08)}
-.cal-day .day-num{font-weight:600;line-height:1}
-.cal-day .day-dot{display:flex;gap:2px;margin-top:2px}
-.cal-day .dot{width:5px;height:5px;border-radius:50%}
-.dot.open{background:#6fcf8d}
-.dot.taken{background:#d06060}
+.cal-day.past{color:#444;cursor:not-allowed}
+.cal-day.available{background:rgba(45,138,78,.15);color:#4ade80}
+.cal-day.partial{background:rgba(184,134,11,.15);color:var(--gold-light)}
+.cal-day.full{background:rgba(139,34,82,.15);color:#f87171;cursor:not-allowed}
+.cal-day.selected{border-color:var(--gold);background:rgba(212,164,55,.2);color:var(--gold-light)}
+.cal-day .dot{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);display:flex;gap:2px}
+.cal-day .dot span{width:4px;height:4px;border-radius:50%}
+.dot-iftar{background:#f59e0b}
+.dot-suhoor{background:#818cf8}
+.legend{display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-dim)}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+.legend-dot.avail{background:rgba(45,138,78,.4)}
+.legend-dot.part{background:rgba(184,134,11,.4)}
+.legend-dot.booked{background:rgba(139,34,82,.4)}
 
-.cal-legend{display:flex;gap:16px;margin-top:12px;justify-content:center;flex-wrap:wrap}
-.cal-legend .leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-dim)}
-.cal-legend .leg .swatch{width:12px;height:12px;border-radius:3px}
-.swatch.s-avail{background:rgba(45,138,78,.4)}
-.swatch.s-partial{background:rgba(184,134,11,.4)}
-.swatch.s-full{background:rgba(139,32,32,.4)}
-.swatch.s-past{background:rgba(255,255,255,.05)}
-
-/* Selected date info */
-.date-info{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;display:none}
-.date-info.show{display:block}
-.date-info h4{color:var(--gold-light);font-size:14px;margin-bottom:10px}
-.meal-options{display:flex;gap:8px}
-.meal-opt{flex:1;padding:12px;border-radius:8px;text-align:center;cursor:pointer;font-size:14px;font-weight:500;transition:all .2s;border:2px solid var(--border)}
-.meal-opt.available{background:rgba(45,138,78,.1);border-color:rgba(45,138,78,.3);color:#6fcf8d}
-.meal-opt.available:hover{border-color:var(--green);background:rgba(45,138,78,.2)}
-.meal-opt.available.chosen{border-color:var(--gold);background:rgba(212,164,55,.15);color:var(--gold-light)}
-.meal-opt.booked{background:rgba(139,32,32,.1);border-color:rgba(139,32,32,.2);color:#d06060;cursor:not-allowed;opacity:.6}
-.meal-opt .meal-icon{font-size:20px;display:block;margin-bottom:4px}
-.meal-opt .meal-status{font-size:10px;margin-top:2px;opacity:.7}
+/* Meal selector */
+.meal-select{display:none;margin:16px 0;text-align:center}
+.meal-select.show{display:block}
+.meal-select p{font-size:13px;color:var(--text-dim);margin-bottom:8px}
+.meal-btn{display:inline-block;padding:10px 24px;margin:0 6px;border-radius:10px;border:2px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;font-size:14px;transition:all .2s}
+.meal-btn:hover:not(.disabled){border-color:var(--gold);color:var(--gold)}
+.meal-btn.active{border-color:var(--gold);background:rgba(212,164,55,.15);color:var(--gold-light)}
+.meal-btn.disabled{opacity:.3;cursor:not-allowed;text-decoration:line-through}
 
 /* Form */
-.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;margin-top:8px;display:none}
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:none}
 .form-card.show{display:block}
-.field{margin-bottom:20px}
-.field:last-child{margin-bottom:0}
-label{display:block;font-size:13px;font-weight:500;color:var(--gold-light);margin-bottom:8px;letter-spacing:.5px}
-input[type="text"],input[type="tel"],input[type="number"],input[type="email"],textarea{width:100%;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:15px;font-family:inherit;transition:border-color .2s}
-input:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,164,55,.1)}
-textarea{resize:vertical;min-height:80px}
-input[type="number"]{-moz-appearance:textfield}
-input[type="number"]::-webkit-inner-spin-button{opacity:1}
-.submit-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:var(--bg);font-size:16px;font-weight:700;border:none;border-radius:8px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:transform .15s,box-shadow .15s;margin-top:8px}
-.submit-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(212,164,55,.3)}
-.submit-btn:active{transform:translateY(0)}
-.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
-
-/* Booking summary bar */
-.booking-summary{background:rgba(212,164,55,.08);border:1px solid rgba(212,164,55,.2);border-radius:8px;padding:10px 16px;margin-bottom:16px;display:none;font-size:13px;color:var(--gold-light)}
-.booking-summary.show{display:flex;align-items:center;justify-content:space-between}
-.booking-summary .bs-text{display:flex;gap:8px;align-items:center}
-.booking-summary .bs-change{color:var(--gold);cursor:pointer;font-size:12px;text-decoration:underline}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;color:var(--text-dim);margin-bottom:6px;font-weight:500}
+.field input,.field textarea{width:100%;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:15px;transition:border-color .2s}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--gold)}
+.field textarea{resize:vertical;min-height:70px}
+.submit-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),#b8891c);color:#0a0a0f;font-size:16px;font-weight:600;border:none;border-radius:10px;cursor:pointer;transition:all .2s}
+.submit-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(212,164,55,.3)}
+.submit-btn:disabled{opacity:.5;transform:none;cursor:not-allowed}
+.booking-summary{background:rgba(212,164,55,.08);border:1px solid rgba(212,164,55,.2);border-radius:8px;padding:12px;margin-bottom:16px;font-size:13px;line-height:1.6}
+.booking-summary strong{color:var(--gold)}
 
 /* Success */
 .success{display:none;text-align:center;padding:60px 20px}
-.success .check{font-size:64px;margin-bottom:16px}
-.success h2{font-size:24px;font-weight:300;margin-bottom:8px}
-.success h2 span{color:var(--gold)}
-.success p{color:var(--text-dim);line-height:1.6;font-size:14px}
-.success .reset-btn{display:inline-block;margin-top:24px;padding:10px 28px;border:1px solid var(--gold-dim);border-radius:8px;color:var(--gold);background:none;cursor:pointer;font-size:14px;font-family:inherit;transition:all .2s}
-.success .reset-btn:hover{background:rgba(212,164,55,.1)}
+.check{font-size:48px;margin-bottom:16px}
+h2 span{color:var(--gold)}
+.success p{color:var(--text-dim);line-height:1.7;margin-bottom:24px}
+.reset-btn{padding:12px 28px;background:transparent;border:1px solid var(--border);color:var(--text);border-radius:10px;cursor:pointer;font-size:14px}
+.reset-btn:hover{border-color:var(--gold);color:var(--gold)}
 
-/* Error banner */
-.error-banner{display:none;background:rgba(139,32,32,.2);border:1px solid rgba(200,60,60,.3);border-radius:8px;padding:12px 16px;margin-bottom:16px;color:#f08080;font-size:13px;text-align:center}
-.error-banner.show{display:block}
+/* Error */
+.error-msg{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:12px;color:#f87171;font-size:13px;margin-bottom:16px;display:none}
+
+.footer{text-align:center;padding:40px 0 20px;color:var(--text-dim);font-size:12px}
+.footer a{color:var(--gold);text-decoration:none}
+
+/* Stars */
+#stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.star{position:absolute;width:2px;height:2px;background:var(--gold-light);border-radius:50%;opacity:0;animation:twinkle 4s infinite}
+@keyframes twinkle{0%,100%{opacity:0}50%{opacity:.6}}
 
 /* Loading */
 .loading{text-align:center;padding:40px;color:var(--text-dim)}
-.loading .spinner{display:inline-block;width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:8px}
+.loading::after{content:'';display:inline-block;width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin-left:8px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-.footer{text-align:center;margin-top:40px;color:var(--text-dim);font-size:12px}
-.footer a{color:var(--gold-dim);text-decoration:none}
-.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
-.star{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:.15;animation:twinkle 4s infinite}
-@keyframes twinkle{0%,100%{opacity:.1}50%{opacity:.3}}
-@media(max-width:480px){.container{padding:16px 12px 40px}.form-card{padding:20px 16px}.cal-day{font-size:12px}h1{font-size:24px}.meal-options{flex-direction:column}}
 </style>
 </head>
 <body>
-
-<div class="stars" id="stars"></div>
-
+<div id="stars"></div>
 <div class="container">
-  <header class="header">
-    <div class="brand">Skyvertise</div>
+  <div class="header">
+    <div class="brand">✦ Skyvertise ✦</div>
     <div class="crescent">🌙</div>
-    <h1>Iftar & <span>Suhoor</span></h1>
-    <p class="subtitle">Join us for a blessed Ramadan gathering</p>
-    <p class="venue">📍 Address Montgomery, Dubai</p>
-    <div class="lanterns">🏮 ✦ 🏮</div>
-  </header>
+    <h1><span>Iftar</span> & <span>Suhoor</span></h1>
+    <p class="subtitle">at <a href="https://maps.app.goo.gl/QvfA9" target="_blank">Address Montgomery, Dubai</a></p>
+  </div>
 
-  <div class="divider"><span>Book Your Table</span></div>
-
-  <div id="mainContent">
-    <!-- Loading -->
-    <div class="loading" id="loadingState">
-      <div class="spinner"></div>
-      <div>Loading availability...</div>
-    </div>
-
-    <!-- Error -->
-    <div class="error-banner" id="errorBanner"></div>
-
-    <!-- Calendar -->
-    <div class="calendar-card" id="calendarCard" style="display:none">
+  <div id="calendarSection">
+    <div class="calendar">
       <div class="cal-header">
-        <button class="cal-nav-btn" id="prevMonth" onclick="changeMonth(-1)">◀</button>
+        <button class="cal-nav" id="prevMonth">‹</button>
         <h3 id="calTitle"></h3>
-        <button class="cal-nav-btn" id="nextMonth" onclick="changeMonth(1)">▶</button>
+        <button class="cal-nav" id="nextMonth">›</button>
       </div>
       <div class="cal-grid" id="calGrid"></div>
-      <div class="cal-legend">
-        <div class="leg"><div class="swatch s-avail"></div>Available</div>
-        <div class="leg"><div class="swatch s-partial"></div>Partial</div>
-        <div class="leg"><div class="swatch s-full"></div>Fully Booked</div>
-        <div class="leg"><div class="swatch s-past"></div>Past</div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot avail"></div>Available</div>
+        <div class="legend-item"><div class="legend-dot part"></div>Partial</div>
+        <div class="legend-item"><div class="legend-dot booked"></div>Fully Booked</div>
+        <div class="legend-item"><span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;display:inline-block"></span> Iftar booked</div>
+        <div class="legend-item"><span style="width:6px;height:6px;border-radius:50%;background:#818cf8;display:inline-block"></span> Suhoor booked</div>
       </div>
     </div>
 
-    <!-- Date info / meal selection -->
-    <div class="date-info" id="dateInfo">
-      <h4 id="dateInfoTitle">Select a meal</h4>
-      <div class="meal-options" id="mealOptions"></div>
-    </div>
-
-    <!-- Booking summary -->
-    <div class="booking-summary" id="bookingSummary">
-      <div class="bs-text">
-        <span id="bsSummaryText"></span>
-      </div>
-      <span class="bs-change" onclick="resetSelection()">Change</span>
-    </div>
-
-    <!-- Booking form -->
-    <div class="form-card" id="formCard">
-      <div class="field">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" placeholder="Enter your full name" required>
-      </div>
-      <div class="field">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="your@email.com" required>
-      </div>
-      <div class="field">
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="+971 50 000 0000" required>
-      </div>
-      <div class="field">
-        <label for="guests">Number of Guests</label>
-        <input type="number" id="guests" min="1" max="50" value="2" required>
-      </div>
-      <div class="field">
-        <label for="notes">Special Requests (Optional)</label>
-        <textarea id="notes" placeholder="Dietary requirements, seating preferences, celebrations..."></textarea>
-      </div>
-      <button class="submit-btn" id="submitBtn" onclick="submitBooking()">Reserve Now</button>
+    <div class="meal-select" id="mealSelect">
+      <p id="selectedDateText">Select a meal for <strong></strong></p>
+      <button class="meal-btn" data-meal="Iftar" onclick="selectMeal('Iftar')">🌅 Iftar</button>
+      <button class="meal-btn" data-meal="Suhoor" onclick="selectMeal('Suhoor')">🌙 Suhoor</button>
     </div>
   </div>
 
-  <!-- Success -->
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div id="formSection" class="form-card">
+    <div class="booking-summary" id="bookingSummary"></div>
+    <form id="bookingForm" action="https://formsubmit.co/Abdullah.Jlelati@skyvertise.io" method="POST">
+      <input type="hidden" name="_subject" value="">
+      <input type="hidden" name="_cc" value="muyasar.abulkhair@skyvertise.io,yasser.mousli@skyvertise.io">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="text" name="_honey" style="display:none">
+      <input type="hidden" name="_autoresponse" value="Thank you for your booking request at Address Montgomery, Dubai! 🌙 Our team will confirm your reservation shortly. Ramadan Mubarak! — Skyvertise Team">
+      <input type="hidden" name="_next" value="https://muyasar.github.io/iftar/thanks.html">
+      <input type="hidden" name="Date" id="formDate">
+      <input type="hidden" name="Meal Type" id="formMeal">
+
+      <div class="field">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="Name" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="Email" placeholder="your@email.com" required>
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="Phone" placeholder="+971 50 000 0000" required>
+      </div>
+
+      <div class="field">
+        <label for="guests">Number of Guests</label>
+        <input type="number" id="guests" name="Guests" min="1" max="50" value="2" required>
+      </div>
+
+      <div class="field">
+        <label for="notes">Special Requests (Optional)</label>
+        <textarea id="notes" name="Notes" placeholder="Dietary requirements, seating preferences, celebrations..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Reserve Now</button>
+    </form>
+  </div>
+
   <div class="success" id="successMsg">
     <div class="check">✨</div>
     <h2>Ramadan <span>Mubarak!</span></h2>
-    <p>Your booking has been confirmed!<br>A confirmation email with a calendar invite<br>has been sent to your inbox.</p>
+    <p>Your booking request has been submitted.<br>A confirmation email has been sent to your inbox.<br>Our team will confirm your reservation shortly.</p>
     <button class="submit-btn" id="calBtn" onclick="downloadCal()" style="margin-bottom:12px">📅 Add to Calendar</button>
     <button class="reset-btn" onclick="resetAll()">Make Another Booking</button>
   </div>
@@ -213,364 +185,258 @@ input[type="number"]::-webkit-inner-spin-button{opacity:1}
 </div>
 
 <script>
-// ============ CONFIGURATION ============
-const APPS_SCRIPT_URL = '';  // <-- PASTE YOUR WEB APP URL HERE AFTER DEPLOYING
-const SHEET_ID = '1XHLRjVZXxuidu0lWqKQzQgur89uE_lCSslxEQsX0yos';
-const RAMADAN_START = '2026-02-18';
-const RAMADAN_END = '2026-03-20';
+// Stars
+(function(){const c=document.getElementById('stars');for(let i=0;i<40;i++){const s=document.createElement('div');s.className='star';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=Math.random()*4+'s';s.style.animationDuration=(3+Math.random()*3)+'s';c.appendChild(s)}})();
 
-// ============ STATE ============
-let bookings = [];  // [{date, meal}]
+const SHEET_ID = '1UxWNVgalxHktpYqOteEntaPtVqWhFkruzAQqFI-rYjA';
+const RAMADAN_START = new Date(2026, 1, 19); // Feb 19
+const RAMADAN_END = new Date(2026, 2, 29);   // Mar 29
+
+let bookings = [];
+let currentMonth = new Date(2026, 1, 1); // Feb 2026
 let selectedDate = null;
 let selectedMeal = null;
-let currentMonth = 1;  // 0-indexed, Feb 2026 = 1
-let currentYear = 2026;
-let lastBooking = {};
 
-// ============ INIT ============
-(function(){
-  // Stars
-  const c=document.getElementById('stars');
-  for(let i=0;i<40;i++){const s=document.createElement('div');s.className='star';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=Math.random()*4+'s';s.style.animationDuration=(3+Math.random()*3)+'s';c.appendChild(s)}
-  
-  // Set initial month to current Ramadan month
-  const today = new Date();
-  currentMonth = today.getMonth();
-  currentYear = today.getFullYear();
-  
-  loadAvailability();
-})();
-
-// ============ DATA LOADING ============
-async function loadAvailability() {
-  document.getElementById('loadingState').style.display = '';
-  document.getElementById('calendarCard').style.display = 'none';
-  
+// Fetch bookings from published Google Sheet
+async function loadBookings() {
   try {
-    // Try Apps Script endpoint first
-    if (APPS_SCRIPT_URL) {
-      const res = await fetch(APPS_SCRIPT_URL);
-      const data = await res.json();
-      bookings = data.bookings || [];
-    } else {
-      // Fallback: read from published Google Sheet
-      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Sheet1`;
-      const res = await fetch(url);
-      const text = await res.text();
-      const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\)/)[1]);
-      bookings = [];
-      const rows = json.table.rows;
-      for (let i = 1; i < rows.length; i++) {
-        const row = rows[i];
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&tq=${encodeURIComponent('SELECT A,B')}`;
+    const resp = await fetch(url);
+    const text = await resp.text();
+    const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/)[1]);
+    
+    bookings = [];
+    if (json.table && json.table.rows) {
+      json.table.rows.forEach(row => {
         if (row.c && row.c[0] && row.c[1]) {
-          let dateVal = row.c[0].v;
-          // Handle Date(year,month,day) format from Google
-          if (typeof dateVal === 'string' && dateVal.startsWith('Date(')) {
-            const parts = dateVal.match(/Date\((\d+),(\d+),(\d+)\)/);
+          let dateVal = row.c[0].f || row.c[0].v;
+          // Handle Date(yyyy,m,d) format
+          if (typeof row.c[0].v === 'string' && row.c[0].v.startsWith('Date(')) {
+            const parts = row.c[0].v.match(/Date\((\d+),(\d+),(\d+)\)/);
             if (parts) {
-              dateVal = `${parts[1]}-${String(Number(parts[2])+1).padStart(2,'0')}-${parts[3].padStart(2,'0')}`;
+              dateVal = `${parts[1]}-${String(+parts[2]+1).padStart(2,'0')}-${parts[3].padStart(2,'0')}`;
             }
           }
-          bookings.push({ date: String(dateVal), meal: String(row.c[1].v) });
+          // If it's already in yyyy-mm-dd format from .f
+          if (row.c[0].f && /^\d{4}-\d{2}-\d{2}$/.test(row.c[0].f)) {
+            dateVal = row.c[0].f;
+          }
+          bookings.push({ date: dateVal, meal: row.c[1].v });
         }
-      }
+      });
     }
   } catch(err) {
-    console.error('Failed to load availability:', err);
-    bookings = [];
+    console.error('Failed to load bookings:', err);
   }
-  
-  document.getElementById('loadingState').style.display = 'none';
-  document.getElementById('calendarCard').style.display = '';
   renderCalendar();
 }
 
-// ============ CALENDAR ============
+function getBookingsForDate(dateStr) {
+  return bookings.filter(b => b.date === dateStr);
+}
+
 function renderCalendar() {
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('calTitle').textContent = `${months[currentMonth]} ${currentYear}`;
-  
-  // Nav buttons
-  const ramStart = new Date(RAMADAN_START);
-  const ramEnd = new Date(RAMADAN_END);
-  document.getElementById('prevMonth').disabled = (currentYear === ramStart.getFullYear() && currentMonth <= ramStart.getMonth());
-  document.getElementById('nextMonth').disabled = (currentYear === ramEnd.getFullYear() && currentMonth >= ramEnd.getMonth());
-  
   const grid = document.getElementById('calGrid');
-  grid.innerHTML = '';
+  const title = document.getElementById('calTitle');
+  const year = currentMonth.getFullYear();
+  const month = currentMonth.getMonth();
   
-  // Day names
-  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
-    const el = document.createElement('div');
-    el.className = 'cal-day-name';
-    el.textContent = d;
-    grid.appendChild(el);
-  });
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  title.textContent = `${monthNames[month]} ${year}`;
   
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
   const today = new Date();
   today.setHours(0,0,0,0);
   
-  // Empty cells
+  let html = '';
+  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+    html += `<div class="cal-day-label">${d}</div>`;
+  });
+  
   for (let i = 0; i < firstDay; i++) {
-    const el = document.createElement('div');
-    el.className = 'cal-day empty';
-    grid.appendChild(el);
+    html += '<div class="cal-day empty"></div>';
   }
   
-  // Day cells
   for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const dateObj = new Date(currentYear, currentMonth, d);
-    const el = document.createElement('div');
-    el.className = 'cal-day';
+    const date = new Date(year, month, d);
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isPast = date < today;
+    const inRange = date >= RAMADAN_START && date <= RAMADAN_END;
+    const dayBookings = getBookingsForDate(dateStr);
+    const hasIftar = dayBookings.some(b => b.meal === 'Iftar');
+    const hasSuhoor = dayBookings.some(b => b.meal === 'Suhoor');
+    const isFull = hasIftar && hasSuhoor;
+    const isPartial = (hasIftar || hasSuhoor) && !isFull;
+    const isSelected = selectedDate === dateStr;
     
-    const isRamadan = dateStr >= RAMADAN_START && dateStr <= RAMADAN_END;
-    const isPast = dateObj < today;
+    let cls = 'cal-day';
+    if (!inRange || isPast) cls += ' past';
+    else if (isFull) cls += ' full';
+    else if (isPartial) cls += ' partial';
+    else cls += ' available';
+    if (isSelected) cls += ' selected';
     
-    if (isPast || !isRamadan) {
-      el.className += ' past';
-    } else {
-      const iftarBooked = bookings.some(b => b.date === dateStr && b.meal === 'Iftar');
-      const suhoorBooked = bookings.some(b => b.date === dateStr && b.meal === 'Suhoor');
-      
-      if (iftarBooked && suhoorBooked) {
-        el.className += ' full';
-      } else if (iftarBooked || suhoorBooked) {
-        el.className += ' partial';
-        el.onclick = () => selectDate(dateStr);
-      } else {
-        el.className += ' available';
-        el.onclick = () => selectDate(dateStr);
-      }
-      
-      if (selectedDate === dateStr) {
-        el.className += ' selected';
-      }
-      
-      // Dots showing individual meal status
-      if (!isPast && isRamadan) {
-        const dotContainer = document.createElement('div');
-        dotContainer.className = 'day-dot';
-        const dotI = document.createElement('div');
-        dotI.className = 'dot ' + (iftarBooked ? 'taken' : 'open');
-        dotI.title = iftarBooked ? 'Iftar booked' : 'Iftar available';
-        const dotS = document.createElement('div');
-        dotS.className = 'dot ' + (suhoorBooked ? 'taken' : 'open');
-        dotS.title = suhoorBooked ? 'Suhoor booked' : 'Suhoor available';
-        dotContainer.appendChild(dotI);
-        dotContainer.appendChild(dotS);
-        el.appendChild(dotContainer);
-      }
+    let dots = '';
+    if (inRange && !isPast) {
+      dots = '<div class="dot">';
+      if (hasIftar) dots += '<span class="dot-iftar"></span>';
+      if (hasSuhoor) dots += '<span class="dot-suhoor"></span>';
+      dots += '</div>';
     }
     
-    const numEl = document.createElement('div');
-    numEl.className = 'day-num';
-    numEl.textContent = d;
-    el.insertBefore(numEl, el.firstChild);
-    
-    grid.appendChild(el);
+    const onclick = (!inRange || isPast || isFull) ? '' : `onclick="selectDate('${dateStr}')"`;
+    html += `<div class="${cls}" ${onclick}>${d}${dots}</div>`;
   }
-}
-
-function changeMonth(dir) {
-  currentMonth += dir;
-  if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-  if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-  renderCalendar();
+  
+  grid.innerHTML = html;
 }
 
 function selectDate(dateStr) {
   selectedDate = dateStr;
   selectedMeal = null;
+  
+  const dayBookings = getBookingsForDate(dateStr);
+  const hasIftar = dayBookings.some(b => b.meal === 'Iftar');
+  const hasSuhoor = dayBookings.some(b => b.meal === 'Suhoor');
+  
+  // Show meal selector
+  const ms = document.getElementById('mealSelect');
+  ms.classList.add('show');
+  
+  const parts = dateStr.split('-');
+  const dateObj = new Date(+parts[0], +parts[1]-1, +parts[2]);
+  const dateDisplay = dateObj.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+  document.getElementById('selectedDateText').innerHTML = `Select a meal for <strong>${dateDisplay}</strong>`;
+  
+  // Enable/disable meal buttons
+  document.querySelectorAll('.meal-btn').forEach(btn => {
+    const meal = btn.dataset.meal;
+    const booked = (meal === 'Iftar' && hasIftar) || (meal === 'Suhoor' && hasSuhoor);
+    btn.classList.toggle('disabled', booked);
+    btn.classList.remove('active');
+  });
+  
+  document.getElementById('formSection').classList.remove('show');
+  document.getElementById('errorMsg').style.display = 'none';
   renderCalendar();
-  showDateInfo(dateStr);
-  document.getElementById('formCard').classList.remove('show');
-  document.getElementById('bookingSummary').classList.remove('show');
 }
 
-function showDateInfo(dateStr) {
-  const info = document.getElementById('dateInfo');
-  const opts = document.getElementById('mealOptions');
-  const d = new Date(dateStr + 'T00:00:00');
-  const formatted = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-  document.getElementById('dateInfoTitle').textContent = formatted;
+function selectMeal(meal) {
+  const dayBookings = getBookingsForDate(selectedDate);
+  const isBooked = dayBookings.some(b => b.meal === meal);
+  if (isBooked) return;
   
-  const iftarBooked = bookings.some(b => b.date === dateStr && b.meal === 'Iftar');
-  const suhoorBooked = bookings.some(b => b.date === dateStr && b.meal === 'Suhoor');
-  
-  opts.innerHTML = '';
-  
-  // Iftar option
-  const iftarEl = document.createElement('div');
-  iftarEl.className = 'meal-opt ' + (iftarBooked ? 'booked' : 'available');
-  iftarEl.innerHTML = `<span class="meal-icon">🌅</span>Iftar<div class="meal-status">${iftarBooked ? 'Booked' : 'Available'}</div>`;
-  if (!iftarBooked) iftarEl.onclick = () => chooseMeal('Iftar', iftarEl);
-  opts.appendChild(iftarEl);
-  
-  // Suhoor option
-  const suhoorEl = document.createElement('div');
-  suhoorEl.className = 'meal-opt ' + (suhoorBooked ? 'booked' : 'available');
-  suhoorEl.innerHTML = `<span class="meal-icon">🌙</span>Suhoor<div class="meal-status">${suhoorBooked ? 'Booked' : 'Available'}</div>`;
-  if (!suhoorBooked) suhoorEl.onclick = () => chooseMeal('Suhoor', suhoorEl);
-  opts.appendChild(suhoorEl);
-  
-  info.classList.add('show');
-  info.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function chooseMeal(meal, el) {
   selectedMeal = meal;
-  document.querySelectorAll('.meal-opt').forEach(e => e.classList.remove('chosen'));
-  el.classList.add('chosen');
+  document.querySelectorAll('.meal-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.meal === meal);
+  });
   
-  // Show summary & form
-  const d = new Date(selectedDate + 'T00:00:00');
-  const formatted = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-  document.getElementById('bsSummaryText').textContent = `${meal === 'Iftar' ? '🌅' : '🌙'} ${meal} · ${formatted}`;
-  document.getElementById('bookingSummary').classList.add('show');
-  document.getElementById('formCard').classList.add('show');
+  // Show form
+  const form = document.getElementById('formSection');
+  form.classList.add('show');
   
-  setTimeout(() => document.getElementById('name').focus(), 200);
+  const parts = selectedDate.split('-');
+  const dateObj = new Date(+parts[0], +parts[1]-1, +parts[2]);
+  const dateDisplay = dateObj.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+  
+  document.getElementById('bookingSummary').innerHTML = 
+    `📅 <strong>${dateDisplay}</strong> · ${meal === 'Iftar' ? '🌅' : '🌙'} <strong>${meal}</strong> · Address Montgomery, Dubai`;
+  
+  document.getElementById('formDate').value = selectedDate;
+  document.getElementById('formMeal').value = meal;
+  document.querySelector('[name="_subject"]').value = `New ${meal} Booking — ${selectedDate} — Skyvertise`;
+  
+  form.scrollIntoView({behavior:'smooth', block:'center'});
 }
 
-function resetSelection() {
-  selectedDate = null;
-  selectedMeal = null;
-  document.getElementById('dateInfo').classList.remove('show');
-  document.getElementById('bookingSummary').classList.remove('show');
-  document.getElementById('formCard').classList.remove('show');
-  document.getElementById('errorBanner').classList.remove('show');
-  renderCalendar();
-}
+// Form submission
+const form = document.getElementById('bookingForm');
+const btn = document.getElementById('submitBtn');
 
-// ============ BOOKING SUBMISSION ============
-async function submitBooking() {
-  const btn = document.getElementById('submitBtn');
-  const errorBanner = document.getElementById('errorBanner');
-  errorBanner.classList.remove('show');
-  
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const guests = document.getElementById('guests').value;
-  const notes = document.getElementById('notes').value.trim();
-  
-  if (!name || !email || !phone || !guests) {
-    errorBanner.textContent = 'Please fill in all required fields.';
-    errorBanner.classList.add('show');
-    return;
-  }
-  if (!selectedDate || !selectedMeal) {
-    errorBanner.textContent = 'Please select a date and meal type.';
-    errorBanner.classList.add('show');
-    return;
-  }
-  
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
   btn.disabled = true;
   btn.textContent = 'Submitting...';
-  
-  lastBooking = { date: selectedDate, meal: selectedMeal, name, guests };
+  document.getElementById('errorMsg').style.display = 'none';
   
   try {
-    if (APPS_SCRIPT_URL) {
-      // Use Apps Script
-      const params = new URLSearchParams({
-        date: selectedDate,
-        meal_type: selectedMeal,
-        name, email, phone, guests, notes
-      });
-      const res = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        body: params,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      });
-      const data = await res.json();
-      if (!data.success) {
-        throw new Error(data.error || 'Booking failed');
-      }
-    } else {
-      // Fallback: use FormSubmit.co + write to sheet description
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('email', email);
-      formData.append('phone', phone);
-      formData.append('date', selectedDate);
-      formData.append('meal_type', selectedMeal);
-      formData.append('guests', guests);
-      formData.append('notes', notes);
-      formData.append('_subject', `New ${selectedMeal} Booking — ${selectedDate}`);
-      formData.append('_cc', 'muyasar.abulkhair@skyvertise.io,yasser.mousli@skyvertise.io');
-      formData.append('_captcha', 'false');
-      formData.append('_template', 'table');
+    const res = await fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: {'Accept': 'application/json'}
+    });
+    
+    if (res.ok) {
+      // Add to local bookings cache to update calendar immediately
+      bookings.push({date: selectedDate, meal: selectedMeal});
       
-      const res = await fetch('https://formsubmit.co/ajax/Abdullah.Jlelati@skyvertise.io', {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
-      if (!res.ok) throw new Error('Submission failed');
+      document.getElementById('calendarSection').style.display = 'none';
+      document.getElementById('formSection').classList.remove('show');
+      document.getElementById('mealSelect').classList.remove('show');
+      document.getElementById('successMsg').style.display = 'block';
+    } else {
+      throw new Error('Submission failed');
     }
-    
-    // Add to local bookings cache
-    bookings.push({ date: selectedDate, meal: selectedMeal });
-    
-    // Show success
-    document.getElementById('mainContent').style.display = 'none';
-    document.getElementById('successMsg').style.display = 'block';
-    
   } catch(err) {
-    errorBanner.textContent = err.message || 'Something went wrong. Please try again.';
-    errorBanner.classList.add('show');
+    const errEl = document.getElementById('errorMsg');
+    errEl.textContent = 'Something went wrong. Please try again or contact us directly.';
+    errEl.style.display = 'block';
     btn.disabled = false;
     btn.textContent = 'Reserve Now';
   }
-}
+});
 
-// ============ CALENDAR DOWNLOAD ============
+// Calendar invite download
 function downloadCal() {
-  const d = lastBooking.date.replace(/-/g, '');
-  const meal = lastBooking.meal;
+  const d = selectedDate.replace(/-/g, '');
+  const meal = selectedMeal;
   const isIftar = meal === 'Iftar';
   const startH = isIftar ? '181500' : '030000';
   const endH = isIftar ? '213000' : '050000';
   const ics = [
     'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Skyvertise//Booking//EN',
     'BEGIN:VEVENT',
-    'DTSTART;TZID=Asia/Dubai:'+d+'T'+startH,
-    'DTEND;TZID=Asia/Dubai:'+d+'T'+endH,
-    'SUMMARY:'+meal+' at Address Montgomery — Skyvertise',
-    'LOCATION:Address Montgomery, Dubai',
-    'DESCRIPTION:'+meal+' booking for '+lastBooking.guests+' guest(s). Name: '+lastBooking.name,
-    'STATUS:CONFIRMED',
+    'DTSTART;TZID=Asia/Dubai:' + d + 'T' + startH,
+    'DTEND;TZID=Asia/Dubai:' + d + 'T' + endH,
+    'SUMMARY:' + meal + ' at Address Montgomery — Skyvertise',
+    'LOCATION:Address Montgomery\\, Dubai',
+    'DESCRIPTION:' + meal + ' booking for ' + document.getElementById('guests').value + ' guest(s)',
+    'STATUS:TENTATIVE',
     'END:VEVENT','END:VCALENDAR'
   ].join('\r\n');
-  const blob = new Blob([ics], {type:'text/calendar'});
+  const blob = new Blob([ics], {type: 'text/calendar'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = meal.toLowerCase()+'-'+lastBooking.date+'.ics';
+  a.download = meal.toLowerCase() + '-' + selectedDate + '.ics';
   a.click();
 }
 
 function resetAll() {
+  form.reset();
   selectedDate = null;
   selectedMeal = null;
-  document.getElementById('name').value = '';
-  document.getElementById('email').value = '';
-  document.getElementById('phone').value = '';
-  document.getElementById('guests').value = '2';
-  document.getElementById('notes').value = '';
-  document.getElementById('mainContent').style.display = '';
+  document.getElementById('calendarSection').style.display = 'block';
+  document.getElementById('formSection').classList.remove('show');
+  document.getElementById('mealSelect').classList.remove('show');
   document.getElementById('successMsg').style.display = 'none';
-  document.getElementById('dateInfo').classList.remove('show');
-  document.getElementById('bookingSummary').classList.remove('show');
-  document.getElementById('formCard').classList.remove('show');
-  document.getElementById('errorBanner').classList.remove('show');
-  document.getElementById('submitBtn').disabled = false;
-  document.getElementById('submitBtn').textContent = 'Reserve Now';
-  loadAvailability();
+  btn.disabled = false;
+  btn.textContent = 'Reserve Now';
+  loadBookings();
 }
+
+// Month navigation
+document.getElementById('prevMonth').onclick = () => {
+  currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+  renderCalendar();
+};
+document.getElementById('nextMonth').onclick = () => {
+  currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+  renderCalendar();
+};
+
+// Init
+loadBookings();
 </script>
 </body>
 </html>
