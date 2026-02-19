@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Admin — Skyvertise</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--card:#13131a;--gold:#d4a437;--text:#e8e8e8;--text-dim:#888;--border:#2a2a35;--green:#2d8a4e;--red:#8b2252}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:24px}
+.container{max-width:800px;margin:0 auto}
+h1{font-size:24px;font-weight:300;margin-bottom:4px}
+h1 span{color:var(--gold);font-weight:600}
+.subtitle{color:var(--text-dim);font-size:13px;margin-bottom:24px}
+.stats{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;flex:1;min-width:120px}
+.stat-num{font-size:24px;font-weight:600;color:var(--gold)}
+.stat-label{font-size:11px;color:var(--text-dim);margin-top:2px}
+.booking{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;transition:border-color .2s}
+.booking.pending{border-left:3px solid #f59e0b}
+.booking.confirmed{border-left:3px solid var(--green)}
+.booking-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.booking-date{font-size:16px;font-weight:600}
+.booking-meal{display:inline-block;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:600}
+.meal-iftar{background:rgba(245,158,11,.15);color:#f59e0b}
+.meal-suhoor{background:rgba(129,140,248,.15);color:#818cf8}
+.status-badge{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600}
+.status-pending{background:rgba(245,158,11,.15);color:#f59e0b}
+.status-confirmed{background:rgba(45,138,78,.15);color:#4ade80}
+.booking-details{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:13px;color:var(--text-dim)}
+.booking-details span{color:var(--text)}
+.confirm-btn{margin-top:12px;padding:10px 20px;background:linear-gradient(135deg,var(--gold),#b8891c);color:#0a0a0f;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;text-decoration:none;display:inline-block;transition:transform .2s}
+.confirm-btn:hover{transform:scale(1.02)}
+.refresh-btn{padding:8px 16px;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:8px;cursor:pointer;font-size:13px}
+.refresh-btn:hover{border-color:var(--gold)}
+.loading{text-align:center;padding:40px;color:var(--text-dim)}
+.empty{text-align:center;padding:40px;color:var(--text-dim)}
+.header-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px}
+.filter-btns{display:flex;gap:6px}
+.filter-btn{padding:6px 12px;border:1px solid var(--border);background:var(--card);color:var(--text-dim);border-radius:6px;cursor:pointer;font-size:12px}
+.filter-btn.active{border-color:var(--gold);color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header-row">
+    <div>
+      <h1>🌙 Booking <span>Admin</span></h1>
+      <p class="subtitle">Skyvertise Iftar & Suhoor — Address Montgomery</p>
+    </div>
+    <button class="refresh-btn" onclick="loadBookings()">↻ Refresh</button>
+  </div>
+
+  <div class="stats" id="stats"></div>
+  
+  <div class="filter-btns" style="margin-bottom:16px">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" data-filter="pending" onclick="setFilter('pending',this)">Pending</button>
+    <button class="filter-btn" data-filter="confirmed" onclick="setFilter('confirmed',this)">Confirmed</button>
+  </div>
+
+  <div id="bookingsList"><div class="loading">Loading bookings...</div></div>
+</div>
+
+<script>
+const SHEET_ID = '1UxWNVgalxHktpYqOteEntaPtVqWhFkruzAQqFI-rYjA';
+let allBookings = [];
+let currentFilter = 'all';
+
+async function loadBookings() {
+  document.getElementById('bookingsList').innerHTML = '<div class="loading">Loading...</div>';
+  
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+    const resp = await fetch(url);
+    const text = await resp.text();
+    const json = JSON.parse(text.match(/setResponse\(([\s\S]+)\);/)[1]);
+    
+    allBookings = [];
+    const cols = json.table.cols.map(c => c.label);
+    
+    json.table.rows.forEach(row => {
+      if (!row.c || !row.c[0]) return;
+      const booking = {};
+      cols.forEach((col, i) => {
+        const cell = row.c[i];
+        if (!cell) { booking[col] = ''; return; }
+        if (col === 'Date') {
+          booking[col] = cell.f || cell.v;
+          if (typeof cell.v === 'string' && cell.v.startsWith('Date(')) {
+            const p = cell.v.match(/Date\((\d+),(\d+),(\d+)\)/);
+            if (p) booking[col] = `${p[1]}-${String(+p[2]+1).padStart(2,'0')}-${p[3].padStart(2,'0')}`;
+          }
+        } else {
+          booking[col] = cell.v || cell.f || '';
+        }
+      });
+      if (booking['Date'] && booking['Meal Type']) allBookings.push(booking);
+    });
+    
+    // Sort by date descending
+    allBookings.sort((a, b) => b['Date'].localeCompare(a['Date']));
+    
+    renderStats();
+    renderBookings();
+  } catch(err) {
+    document.getElementById('bookingsList').innerHTML = '<div class="empty">Failed to load bookings. Try refreshing.</div>';
+    console.error(err);
+  }
+}
+
+function renderStats() {
+  const total = allBookings.length;
+  const pending = allBookings.filter(b => (b['Status']||'Pending').toLowerCase() !== 'confirmed').length;
+  const confirmed = total - pending;
+  const iftars = allBookings.filter(b => b['Meal Type'] === 'Iftar').length;
+  const suhoors = allBookings.filter(b => b['Meal Type'] === 'Suhoor').length;
+  
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-num">${total}</div><div class="stat-label">Total Bookings</div></div>
+    <div class="stat"><div class="stat-num">${pending}</div><div class="stat-label">Pending</div></div>
+    <div class="stat"><div class="stat-num">${confirmed}</div><div class="stat-label">Confirmed</div></div>
+    <div class="stat"><div class="stat-num">${iftars} / ${suhoors}</div><div class="stat-label">Iftar / Suhoor</div></div>
+  `;
+}
+
+function renderBookings() {
+  const container = document.getElementById('bookingsList');
+  let filtered = allBookings;
+  
+  if (currentFilter === 'pending') {
+    filtered = allBookings.filter(b => (b['Status']||'Pending').toLowerCase() !== 'confirmed');
+  } else if (currentFilter === 'confirmed') {
+    filtered = allBookings.filter(b => (b['Status']||'').toLowerCase() === 'confirmed');
+  }
+  
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty">No bookings found.</div>';
+    return;
+  }
+  
+  container.innerHTML = filtered.map(b => {
+    const status = (b['Status'] || 'Pending').toLowerCase();
+    const isConfirmed = status === 'confirmed';
+    const mealClass = b['Meal Type'] === 'Iftar' ? 'meal-iftar' : 'meal-suhoor';
+    const mealIcon = b['Meal Type'] === 'Iftar' ? '🌅' : '🌙';
+    
+    const dateObj = new Date(b['Date'] + 'T00:00:00');
+    const dateDisplay = dateObj.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+    
+    // Build mailto confirmation link
+    const bookerEmail = b['Email'] || '';
+    const bookerName = b['Name'] || 'Guest';
+    const guests = b['Guests'] || '2';
+    const confirmSubject = encodeURIComponent(`${b['Meal Type']} Booking Confirmed — ${b['Date']} — Skyvertise`);
+    const confirmBody = encodeURIComponent(
+      `Dear ${bookerName},\n\n` +
+      `Great news! Your ${b['Meal Type']} booking has been confirmed! ✨\n\n` +
+      `📅 Date: ${b['Date']}\n` +
+      `🍽 Meal: ${b['Meal Type']}\n` +
+      `👥 Guests: ${guests}\n` +
+      `📍 Venue: Address Montgomery, Dubai\n\n` +
+      `We look forward to seeing you!\n\n` +
+      `Ramadan Mubarak! 🌙\n` +
+      `— Skyvertise Team`
+    );
+    const mailtoLink = `mailto:${bookerEmail}?cc=muyasar.abulkhair@skyvertise.io,yasser.mousli@skyvertise.io&subject=${confirmSubject}&body=${confirmBody}`;
+    
+    const confirmBtn = isConfirmed ? '' : 
+      `<a href="${mailtoLink}" class="confirm-btn" target="_blank">✉️ Send Confirmation Email</a>`;
+    
+    return `
+      <div class="booking ${status}">
+        <div class="booking-header">
+          <div>
+            <span class="booking-date">${dateDisplay}</span>
+            <span class="booking-meal ${mealClass}">${mealIcon} ${b['Meal Type']}</span>
+          </div>
+          <span class="status-badge status-${status}">${isConfirmed ? '✅ Confirmed' : '⏳ Pending'}</span>
+        </div>
+        <div class="booking-details">
+          <div>👤 <span>${b['Name'] || '-'}</span></div>
+          <div>📧 <span>${b['Email'] || '-'}</span></div>
+          <div>📱 <span>${b['Phone'] || '-'}</span></div>
+          <div>👥 <span>${b['Guests'] || '-'} guests</span></div>
+          ${b['Notes'] ? `<div style="grid-column:1/-1">📝 <span>${b['Notes']}</span></div>` : ''}
+        </div>
+        ${confirmBtn}
+      </div>
+    `;
+  }).join('');
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBookings();
+}
+
+loadBookings();
+// Auto-refresh every 30 seconds
+setInterval(loadBookings, 30000);
+</script>
+</body>
+</html>
