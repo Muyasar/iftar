@@ -92,6 +92,12 @@ input[type="number"]::-webkit-inner-spin-button{opacity:1}
       <input type="hidden" name="_template" value="table">
       <input type="text" name="_honey" style="display:none">
       <input type="hidden" name="_next" value="thanks.html">
+      <input type="hidden" name="_autoresponse" value="Thank you for your Iftar/Suhoor booking request at Address Montgomery, Dubai! 🌙
+
+We've received your reservation and our team will reach out shortly to confirm the details.
+
+Ramadan Mubarak!
+— Skyvertise Team">
 
       <div class="field">
         <label for="date">Select Date</label>
@@ -111,6 +117,11 @@ input[type="number"]::-webkit-inner-spin-button{opacity:1}
       <div class="field">
         <label for="name">Full Name</label>
         <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required>
       </div>
 
       <div class="field">
@@ -135,7 +146,8 @@ input[type="number"]::-webkit-inner-spin-button{opacity:1}
   <div class="success" id="successMsg">
     <div class="check">✨</div>
     <h2>Ramadan <span>Mubarak!</span></h2>
-    <p>Your booking request has been submitted.<br>Our team will confirm your reservation shortly.</p>
+    <p>Your booking request has been submitted.<br>A confirmation email has been sent to your inbox.<br>Our team will confirm your reservation shortly.</p>
+    <button class="submit-btn" id="calBtn" onclick="downloadCal()" style="margin-bottom:12px">📅 Add to Calendar</button>
     <button class="reset-btn" onclick="resetForm()">Make Another Booking</button>
   </div>
 
@@ -154,6 +166,7 @@ const btn=document.getElementById('submitBtn');
 
 form.addEventListener('submit',async function(e){
   e.preventDefault();
+  lastBooking={date:document.getElementById('date').value,meal:document.querySelector('input[name="meal_type"]:checked').value,name:document.getElementById('name').value,guests:document.getElementById('guests').value};
   btn.disabled=true;
   btn.textContent='Submitting...';
   
@@ -175,6 +188,34 @@ form.addEventListener('submit',async function(e){
     btn.textContent='Reserve Now';
   }
 });
+
+// Store booking data for calendar invite
+let lastBooking={};
+
+function downloadCal(){
+  const d=lastBooking.date.replace(/-/g,'');
+  const meal=lastBooking.meal;
+  const isIftar=meal==='Iftar';
+  // Iftar ~6:15 PM, Suhoor ~3:00 AM Dubai time (approximate)
+  const startH=isIftar?'181500':'030000';
+  const endH=isIftar?'213000':'050000';
+  const ics=[
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Skyvertise//Booking//EN',
+    'BEGIN:VEVENT',
+    'DTSTART;TZID=Asia/Dubai:'+d+'T'+startH,
+    'DTEND;TZID=Asia/Dubai:'+d+'T'+endH,
+    'SUMMARY:'+meal+' at Address Montgomery — Skyvertise',
+    'LOCATION:Address Montgomery, Dubai',
+    'DESCRIPTION:'+meal+' booking for '+lastBooking.guests+' guest(s). Name: '+lastBooking.name,
+    'STATUS:TENTATIVE',
+    'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  const blob=new Blob([ics],{type:'text/calendar'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=meal.toLowerCase()+'-'+lastBooking.date+'.ics';
+  a.click();
+}
 
 function resetForm(){
   form.reset();
