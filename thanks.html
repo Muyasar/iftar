@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Submitted — Skyvertise</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--gold:#d4a437;--gold-light:#f0d078;--text:#e8e8e8;--text-dim:#888}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 20%,rgba(212,164,55,.06) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(212,164,55,.04) 0%,transparent 50%);pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:500px}
+.check{font-size:64px;margin-bottom:20px}
+h1{font-size:32px;font-weight:300;margin-bottom:8px}
+h1 span{color:var(--gold);font-weight:600}
+p{color:var(--text-dim);line-height:1.7;margin-bottom:30px}
+a{display:inline-block;padding:14px 32px;background:linear-gradient(135deg,var(--gold),#b8891c);color:#0a0a0f;font-weight:600;border-radius:10px;text-decoration:none;transition:transform .2s}
+a:hover{transform:scale(1.03)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="check">✨</div>
+  <h1>Ramadan <span>Mubarak!</span></h1>
+  <p>Your booking request has been submitted successfully.<br>Our team will confirm your reservation shortly.</p>
+  <a href="/iftar/">Make Another Booking</a>
+</div>
+</body>
+</html>

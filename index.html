@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iftar & Suhoor Booking — Skyvertise</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--card:#13131a;--gold:#d4a437;--gold-light:#f0d078;--gold-dim:#a07820;--text:#e8e8e8;--text-dim:#888;--border:#2a2a35;--radius:12px}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+/* Decorative background */
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 20%,rgba(212,164,55,.06) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(212,164,55,.04) 0%,transparent 50%);pointer-events:none;z-index:0}
+.container{max-width:600px;margin:0 auto;padding:24px 16px 60px;position:relative;z-index:1}
+/* Header */
+.header{text-align:center;padding:40px 0 10px}
+.brand{font-size:14px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.crescent{font-size:48px;margin:16px 0;filter:drop-shadow(0 0 20px rgba(212,164,55,.4))}
+h1{font-size:28px;font-weight:300;letter-spacing:1px;margin-bottom:6px}
+h1 span{color:var(--gold);font-weight:600}
+.subtitle{color:var(--text-dim);font-size:14px;line-height:1.6}
+.venue{color:var(--gold-light);font-weight:500;font-size:15px;margin-top:12px}
+/* Lantern decorations */
+.lanterns{display:flex;justify-content:center;gap:32px;margin:24px 0 8px;font-size:28px;opacity:.5}
+/* Divider */
+.divider{display:flex;align-items:center;gap:12px;margin:28px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent)}
+.divider span{color:var(--gold-dim);font-size:12px;letter-spacing:3px;text-transform:uppercase}
+/* Form */
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;margin-top:8px}
+.field{margin-bottom:20px}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:13px;font-weight:500;color:var(--gold-light);margin-bottom:8px;letter-spacing:.5px}
+input[type="text"],input[type="tel"],input[type="number"],input[type="date"],textarea,select{width:100%;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:15px;font-family:inherit;transition:border-color .2s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,164,55,.1)}
+input[type="date"]{cursor:pointer}
+input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.7) sepia(1) hue-rotate(10deg)}
+textarea{resize:vertical;min-height:80px}
+/* Radio toggle */
+.toggle-group{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.toggle-group input{display:none}
+.toggle-group label{flex:1;text-align:center;padding:12px;cursor:pointer;font-size:15px;font-weight:500;color:var(--text-dim);transition:all .25s;margin:0;letter-spacing:0}
+.toggle-group input:checked+label{background:var(--gold);color:var(--bg);font-weight:600}
+/* Number input */
+input[type="number"]{-moz-appearance:textfield}
+input[type="number"]::-webkit-inner-spin-button{opacity:1}
+/* Submit */
+.submit-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:var(--bg);font-size:16px;font-weight:700;border:none;border-radius:8px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:transform .15s,box-shadow .15s;margin-top:8px}
+.submit-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(212,164,55,.3)}
+.submit-btn:active{transform:translateY(0)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+/* Success */
+.success{display:none;text-align:center;padding:60px 20px}
+.success .check{font-size:64px;margin-bottom:16px}
+.success h2{font-size:24px;font-weight:300;margin-bottom:8px}
+.success h2 span{color:var(--gold)}
+.success p{color:var(--text-dim);line-height:1.6;font-size:14px}
+.success .reset-btn{display:inline-block;margin-top:24px;padding:10px 28px;border:1px solid var(--gold-dim);border-radius:8px;color:var(--gold);background:none;cursor:pointer;font-size:14px;font-family:inherit;transition:all .2s}
+.success .reset-btn:hover{background:rgba(212,164,55,.1)}
+/* Footer */
+.footer{text-align:center;margin-top:40px;color:var(--text-dim);font-size:12px}
+.footer a{color:var(--gold-dim);text-decoration:none}
+/* Star pattern background */
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;width:2px;height:2px;background:var(--gold);border-radius:50%;opacity:.15;animation:twinkle 4s infinite}
+@keyframes twinkle{0%,100%{opacity:.1}50%{opacity:.3}}
+/* Responsive */
+@media(max-width:480px){.container{padding:16px 12px 40px}.form-card{padding:20px 16px}h1{font-size:24px}}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+  <header class="header">
+    <div class="brand">Skyvertise</div>
+    <div class="crescent">🌙</div>
+    <h1>Iftar & <span>Suhoor</span></h1>
+    <p class="subtitle">Join us for a blessed Ramadan gathering</p>
+    <p class="venue">📍 Address Montgomery, Dubai</p>
+    <div class="lanterns">🏮 ✦ 🏮</div>
+  </header>
+
+  <div class="divider"><span>Book Your Table</span></div>
+
+  <div id="formSection">
+    <form id="bookingForm" action="https://formsubmit.co/Abdullah.Jlelati@skyvertise.io" method="POST" class="form-card">
+      
+      <input type="hidden" name="_subject" value="New Iftar/Suhoor Booking — Skyvertise">
+      <input type="hidden" name="_cc" value="muyasar.abulkhair@skyvertise.io,yasser.mousli@skyvertise.io">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="text" name="_honey" style="display:none">
+      <input type="hidden" name="_next" value="thanks.html">
+
+      <div class="field">
+        <label for="date">Select Date</label>
+        <input type="date" id="date" name="date" min="2026-02-28" max="2026-03-29" required>
+      </div>
+
+      <div class="field">
+        <label>Meal Type</label>
+        <div class="toggle-group">
+          <input type="radio" id="iftar" name="meal_type" value="Iftar" checked>
+          <label for="iftar">🌅 Iftar</label>
+          <input type="radio" id="suhoor" name="meal_type" value="Suhoor">
+          <label for="suhoor">🌙 Suhoor</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="+971 50 000 0000" required>
+      </div>
+
+      <div class="field">
+        <label for="guests">Number of Guests</label>
+        <input type="number" id="guests" name="guests" min="1" max="50" value="2" required>
+      </div>
+
+      <div class="field">
+        <label for="notes">Special Requests (Optional)</label>
+        <textarea id="notes" name="notes" placeholder="Dietary requirements, seating preferences, celebrations..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">Reserve Now</button>
+    </form>
+  </div>
+
+  <div class="success" id="successMsg">
+    <div class="check">✨</div>
+    <h2>Ramadan <span>Mubarak!</span></h2>
+    <p>Your booking request has been submitted.<br>Our team will confirm your reservation shortly.</p>
+    <button class="reset-btn" onclick="resetForm()">Make Another Booking</button>
+  </div>
+
+  <footer class="footer">
+    <p>© 2026 <a href="https://skyvertise.io">Skyvertise</a> · Ramadan Kareem 🌙</p>
+  </footer>
+</div>
+
+<script>
+// Generate subtle star background
+(function(){const c=document.getElementById('stars');for(let i=0;i<40;i++){const s=document.createElement('div');s.className='star';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.animationDelay=Math.random()*4+'s';s.style.animationDuration=(3+Math.random()*3)+'s';c.appendChild(s)}})();
+
+// Form submission via fetch
+const form=document.getElementById('bookingForm');
+const btn=document.getElementById('submitBtn');
+
+form.addEventListener('submit',async function(e){
+  e.preventDefault();
+  btn.disabled=true;
+  btn.textContent='Submitting...';
+  
+  try{
+    const res=await fetch(form.action,{
+      method:'POST',
+      body:new FormData(form),
+      headers:{'Accept':'application/json'}
+    });
+    if(res.ok){
+      document.getElementById('formSection').style.display='none';
+      document.getElementById('successMsg').style.display='block';
+    }else{
+      throw new Error('Submission failed');
+    }
+  }catch(err){
+    alert('Something went wrong. Please try again or contact us directly.');
+    btn.disabled=false;
+    btn.textContent='Reserve Now';
+  }
+});
+
+function resetForm(){
+  form.reset();
+  document.getElementById('formSection').style.display='block';
+  document.getElementById('successMsg').style.display='none';
+  btn.disabled=false;
+  btn.textContent='Reserve Now';
+}
+</script>
+</body>
+</html>
