@@ -437,6 +437,11 @@ document.getElementById('nextMonth').onclick = () => {
 
 // Init
 loadBookings();
+
+// Auto-refresh availability every 10 minutes
+setInterval(() => {
+  loadBookings();
+}, 10 * 60 * 1000);
 </script>
 </body>
 </html>
