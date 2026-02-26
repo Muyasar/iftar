@@ -271,14 +271,15 @@ function renderCalendar() {
     const isSelected = selectedDate === dateStr;
     
     let cls = 'cal-day';
-    if (!inRange || isPast) cls += ' past';
+    if (!inRange) cls += ' past';
     else if (isFull) cls += ' full';
     else if (isPartial) cls += ' partial';
+    else if (isPast) cls += ' past';
     else cls += ' available';
     if (isSelected) cls += ' selected';
     
     let dots = '';
-    if (inRange && !isPast) {
+    if (inRange && (hasIftar || hasSuhoor)) {
       dots = '<div class="dot">';
       if (hasIftar) dots += '<span class="dot-iftar"></span>';
       if (hasSuhoor) dots += '<span class="dot-suhoor"></span>';
